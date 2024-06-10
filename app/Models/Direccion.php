@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Usuario extends Model
+class Direccion extends Model
 {
     use HasFactory;
 
-    protected $table = 'usuario';
+    protected $table = 'direccion';
     protected $primaryKey = 'id';
     public $incrementing = true;
 
@@ -19,16 +19,15 @@ class Usuario extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
-        'password',
-        'nombre'
+        'calle',
+        'numero'
     ];
 
     /**
-     * Define the relationship with the Direccion model (if it exists).
+     * Define the inverse relationship with the Usuario model.
      */
-    public function direccion()
+    public function usuarios()
     {
-        return $this->hasOne(Direccion::class, 'direccion_id', 'usuario_id');
+        return $this->belongsTo(Usuario::class);
     }
 }

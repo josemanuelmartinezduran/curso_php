@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Direccion;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,8 @@ class UsuarioController extends Controller
 {
     function form()
     {
-        return view("usuario.form");
+        $direcciones = Direccion::all();
+        return view("usuario.form", ["direcciones" => $direcciones]);
     }
 
     function success(){
@@ -54,7 +56,8 @@ class UsuarioController extends Controller
         $validatedData = $request->validate([
             'username' => 'required',
             'password' => 'required',
-            'nombre' => 'required'
+            'nombre' => 'required',
+            'direccion_id' => 'direccion'
         ]);
         var_dump($validatedData);
 
