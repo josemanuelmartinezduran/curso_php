@@ -5,9 +5,72 @@ namespace App\Http\Controllers;
 use App\Models\Direccion;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
+        /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $usuarios = Usuario::all();
+        return response()->json($usuarios);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'username' => 'required|unique:usuarios',
+            'password' => 'required|min:8',
+            'nombre' => 'required',
+        ]);
+
+        $validatedData['password'] = Hash::make($validatedData['password']); // Hash the password
+
+        $usuario = Usuario::create($validatedData);
+        return response()->json($usuario, 201); // 201 Created status
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Usuario $usuario) // Laravel automatically finds the user by ID
+    {
+        return response()->json($usuario);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Usuario $usuario)
+    {
+        $validatedData = $request->validate([
+            'username' => 'required|unique:usuarios,username,' . $usuario->id, // Unique except current user
+            'password' => 'nullable|min:8',
+            'nombre' => 'required',
+        ]);
+
+        if ($request->has('password')) {
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        }
+
+        $usuario->update($validatedData);
+        return response()->json($usuario);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Usuario $usuario)
+    {
+        $usuario->delete();
+        return response()->json(['message' => 'Usuario deleted']);
+    }
+
     function form()
     {
         $direcciones = Direccion::all();
@@ -24,11 +87,11 @@ class UsuarioController extends Controller
         return redirect("/usuarios");
     }
 
-    function update(Request $request, $id){
+   /*  function update(Request $request, $id){
         $usuario = Usuario::find($id);
         return view("/usuario.edit", ["usuario"=>$usuario]);
     }
-
+ */
     function updateUser(Request $request)
     {
         // Validate and store the new user

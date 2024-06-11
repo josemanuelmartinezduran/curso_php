@@ -13,7 +13,12 @@ class ExampleTest extends TestCase
     public function test_the_application_returns_a_successful_response(): void
     {
         $response = $this->get('/');
-
         $response->assertStatus(200);
+    }
+
+    public function test_user_must_be_logged_on(): void
+    {
+        $response = $this->get('/userssucess');
+        $response->withSession(['validuser' => true])->assertStatus(200);
     }
 }

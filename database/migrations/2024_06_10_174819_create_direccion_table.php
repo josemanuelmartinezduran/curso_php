@@ -18,6 +18,10 @@ return new class extends Migration
         });
 
         Schema::table('usuario', function (Blueprint $table) {
+            $table->string('username');
+            $table->string('password');
+            $table->string('nombre');
+            $table->timestamps();
             $table->foreignId('direccion_id');
         });
     }
@@ -28,5 +32,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('direccion');
+        Schema::dropIfExists('usuario');
     }
 };
