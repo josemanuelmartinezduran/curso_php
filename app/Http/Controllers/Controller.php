@@ -5,5 +5,6 @@ namespace App\Http\Controllers;
 abstract class Controller
 {
     //
-    // Cambio en rama bug fix
+    
+    // Camb aqui ya le moví debe habler conflicto
 }
